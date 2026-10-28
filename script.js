@@ -119,8 +119,7 @@ const COLLISION_MONEY_PENALTY = 50;
 const COLLISION_SCORE_PENALTY = 10;
 const LEADERBOARD_STORAGE_KEY = 'helo-swamps-leaderboard-v1';
 const LEADERBOARD_VERSION = 1;
-const LEADERBOARD_MAX_STORAGE_CHARS = 2000000;
-const LEADERBOARD_MAX_RECORDS_TO_LOAD = 10000;
+const LEADERBOARD_MAX_RUNS = 80;
 const HEALTH_PICKUP_SCORE_STEP = 700;
 const HEALTH_PICKUP_HEAL = 50;
 const SMALL_HEALTH_PICKUP_HEAL = 10;
@@ -1738,10 +1737,7 @@ function tryCleanWater() {
 
   if (remaining - 1 <= 0) {
     zonesCleaned += 1;
-
-    if (zonesCleaned < DIRTY_POND_COUNT) {
-      awardSmallHealthPickup();
-    }
+    awardSmallHealthPickup();
   }
 
   updatePondAppearance(pond);
@@ -2908,11 +2904,11 @@ function isValidLeaderboardRun(run) {
     return false;
   }
 
-  if (typeof run.id !== 'string' || run.id.length < 1 || run.id.length > 128) {
+  if (typeof run.id !== 'string' || run.id.length < 1) {
     return false;
   }
 
-  if (typeof run.name !== 'string' || sanitizePlayerName(run.name) !== run.name || run.name.length < 1) {
+  if (typeof run.name !== 'string' || run.name.length < 1 || run.name.length > 20) {
     return false;
   }
 
@@ -2920,38 +2916,23 @@ function isValidLeaderboardRun(run) {
     return false;
   }
 
-  if (
-    typeof run.score !== 'number' ||
-    !Number.isFinite(run.score) ||
-    run.score < 0 ||
-    Number.isInteger(run.score) === false
-  ) {
+  if (typeof run.score !== 'number' || !isFinite(run.score) || run.score < 0) {
     return false;
   }
 
-  if (
-    typeof run.moneyRemaining !== 'number' ||
-    !Number.isFinite(run.moneyRemaining) ||
-    run.moneyRemaining < 0 ||
-    Number.isInteger(run.moneyRemaining) === false
-  ) {
+  if (typeof run.moneyRemaining !== 'number' || !isFinite(run.moneyRemaining) || run.moneyRemaining < 0) {
     return false;
   }
 
-  if (
-    typeof run.totalMoneyEarned !== 'number' ||
-    !Number.isFinite(run.totalMoneyEarned) ||
-    run.totalMoneyEarned < 0 ||
-    Number.isInteger(run.totalMoneyEarned) === false
-  ) {
+  if (typeof run.totalMoneyEarned !== 'number' || !isFinite(run.totalMoneyEarned) || run.totalMoneyEarned < 0) {
     return false;
   }
 
-  if (typeof run.zonesCleaned !== 'number' || !Number.isInteger(run.zonesCleaned) || run.zonesCleaned < 0 || run.zonesCleaned > DIRTY_POND_COUNT) {
+  if (typeof run.zonesCleaned !== 'number' || !isFinite(run.zonesCleaned) || run.zonesCleaned < 0) {
     return false;
   }
 
-  if (typeof run.elapsedMs !== 'number' || !Number.isFinite(run.elapsedMs) || run.elapsedMs < 0) {
+  if (typeof run.elapsedMs !== 'number' || !isFinite(run.elapsedMs) || run.elapsedMs < 0) {
     return false;
   }
 
@@ -2959,11 +2940,7 @@ function isValidLeaderboardRun(run) {
     return false;
   }
 
-  if (run.victory && run.zonesCleaned !== DIRTY_POND_COUNT) {
-    return false;
-  }
-
-  if (typeof run.date !== 'string' || Number.isFinite(Date.parse(run.date)) === false) {
+  if (typeof run.date !== 'string' || run.date.length < 1) {
     return false;
   }
 
@@ -2978,24 +2955,17 @@ function loadLeaderboardData() {
       return emptyLeaderboardData();
     }
 
-    if (raw.length > LEADERBOARD_MAX_STORAGE_CHARS) {
-      return emptyLeaderboardData();
-    }
-
     const parsed = JSON.parse(raw);
 
-    if (!parsed || parsed.version !== LEADERBOARD_VERSION || Array.isArray(parsed.runs) === false) {
+    if (!parsed || parsed.version !== LEADERBOARD_VERSION || !parsed.runs || parsed.runs.length === undefined) {
       return emptyLeaderboardData();
     }
 
     const runs = [];
-    const runIds = new Set();
-    const recordCount = Math.min(parsed.runs.length, LEADERBOARD_MAX_RECORDS_TO_LOAD);
 
-    for (let i = 0; i < recordCount; i += 1) {
-      if (isValidLeaderboardRun(parsed.runs[i]) && runIds.has(parsed.runs[i].id) === false) {
+    for (let i = 0; i < parsed.runs.length; i += 1) {
+      if (isValidLeaderboardRun(parsed.runs[i])) {
         runs.push(parsed.runs[i]);
-        runIds.add(parsed.runs[i].id);
       }
     }
 
@@ -3079,36 +3049,6 @@ function rankLeaderboard(runs, difficulty, category) {
   });
 
   return filtered.slice(0, 10);
-}
-
-function retainLeaderboardRuns(runs) {
-  const retainedIds = new Set();
-  const difficulties = [DIFFICULTY_EASY, DIFFICULTY_HARD];
-  const categories = ['richest', 'scorers', 'fastest'];
-
-  for (let d = 0; d < difficulties.length; d += 1) {
-    for (let c = 0; c < categories.length; c += 1) {
-      const rankedRuns = rankLeaderboard(runs, difficulties[d], categories[c]);
-
-      for (let r = 0; r < rankedRuns.length; r += 1) {
-        retainedIds.add(rankedRuns[r].id);
-      }
-    }
-  }
-
-  const retainedRuns = [];
-  const addedIds = new Set();
-
-  for (let i = 0; i < runs.length; i += 1) {
-    const run = runs[i];
-
-    if (retainedIds.has(run.id) && addedIds.has(run.id) === false) {
-      retainedRuns.push(run);
-      addedIds.add(run.id);
-    }
-  }
-
-  return retainedRuns;
 }
 
 function sanitizePlayerName(raw) {
@@ -3204,7 +3144,32 @@ function saveCurrentRun(name) {
   }
 
   data.runs.push(buildCurrentRunRecord(name));
-  data.runs = retainLeaderboardRuns(data.runs);
+
+  const byDifficulty = {};
+
+  for (let r = 0; r < data.runs.length; r += 1) {
+    const difficulty = data.runs[r].difficulty;
+
+    if (!byDifficulty[difficulty]) {
+      byDifficulty[difficulty] = [];
+    }
+
+    byDifficulty[difficulty].push(data.runs[r]);
+  }
+
+  const trimmed = [];
+  const keys = [DIFFICULTY_EASY, DIFFICULTY_HARD];
+
+  for (let k = 0; k < keys.length; k += 1) {
+    const group = byDifficulty[keys[k]] || [];
+    const start = Math.max(0, group.length - LEADERBOARD_MAX_RUNS);
+
+    for (let g = start; g < group.length; g += 1) {
+      trimmed.push(group[g]);
+    }
+  }
+
+  data.runs = trimmed;
 
   if (saveLeaderboardData(data) === false) {
     setScoreSaveStatus('Could not save on this browser. Your game still finished.', 'is-error');

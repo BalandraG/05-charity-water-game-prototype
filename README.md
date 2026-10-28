@@ -104,7 +104,7 @@ The project did not include licensed helicopter recordings, so every effect is *
 | Control | What it does |
 | --- | --- |
 | **Sound On / Muted** | Mutes or unmutes all audio immediately |
-| **Sound effects** | Volume for cleaning, delivery, fuel, health, collisions, Game Over, and MISSION COMPLETE |
+| **Sound effects** | Volume for cleaning, delivery, fuel, health, collisions, and Game Over |
 | **Helicopters** | Volume for the player loop and the nearby-enemy loop |
 
 Settings are saved in `localStorage` when the browser allows it.
@@ -113,7 +113,7 @@ Browsers block sound until a real click or tap. Press **Start Game** (or use a s
 
 One quiet player rotor loop runs during flight. A second, slightly lower enemy loop gets louder when enemies are close and quieter when they are far. Hard Mode still uses that single enemy layer so eight helicopters do not stack eight full-volume engines.
 
-There is no `sounds/` folder and no third-party audio URLs. `audio.js` generates all nine categories locally: player rotor, enemy rotor, collision, cleaning, delivery, fuel, health pickup, Game Over, and MISSION COMPLETE victory. Safari and older WebKit builds use `webkitAudioContext` when `AudioContext` is missing. If the browser blocks or suspends audio, the game keeps playing silently.
+There is no `sounds/` folder and no third-party audio URLs. `audio.js` generates all eight categories locally: player rotor, enemy rotor, collision, cleaning, delivery, fuel, health pickup, and Game Over. Safari and older WebKit builds use `webkitAudioContext` when `AudioContext` is missing. If the browser blocks or suspends audio, the game keeps playing silently.
 
 ## Educational purpose
 
