@@ -17,6 +17,8 @@
   --hud: #003366;
   --swamp: #2f8f4e;
   --white: #ffffff;
+  /* No licensed charity: water typeface is bundled. HUD stays on this stack for readability. */
+  --brand-font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ---------- Page ---------- */
@@ -32,7 +34,7 @@ body {
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--brand-font);
   font-size: 1rem;
   line-height: 1.5;
   color: var(--ink);
@@ -152,11 +154,26 @@ a {
 .screen-title {
   margin: 0;
   max-width: 100%;
+  font-family: var(--brand-font);
   font-size: 1.85rem;
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.game-over-reason {
+  margin: 0;
+  color: var(--navy);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.game-over-reason:empty {
+  display: none;
 }
 
 #game-title {
@@ -171,9 +188,24 @@ a {
   color: var(--terracotta);
 }
 
+#game-over-screen.is-victory {
+  background-color: var(--dark-green);
+  background-image: url("img/swamp-menu.png");
+  background-position: center 18%;
+}
+
+#game-over-screen.is-victory #game-over-title {
+  color: var(--dark-green);
+}
+
+#game-over-screen.is-victory .game-over-reason {
+  color: var(--dark-green);
+}
+
 .subtitle {
   margin: 0;
   color: var(--navy);
+  font-family: var(--brand-font);
   font-size: 1.1rem;
   font-weight: 700;
 }
@@ -214,6 +246,68 @@ a {
   text-transform: uppercase;
 }
 
+.difficulty-select {
+  margin: 0;
+  padding: 0;
+  border: none;
+  width: 100%;
+}
+
+.difficulty-select legend {
+  margin: 0 0 0.45rem;
+  color: var(--navy);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.difficulty-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.difficulty-option {
+  flex: 1 1 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.difficulty-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.difficulty-option span {
+  display: block;
+  padding: 0.55rem 0.7rem;
+  color: var(--navy);
+  background: var(--cream);
+  border: 3px solid var(--navy);
+  border-radius: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.difficulty-option.is-selected span,
+.difficulty-option:has(input:checked) span {
+  color: var(--ink);
+  background: var(--yellow);
+}
+
+.difficulty-option input:focus-visible + span {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.difficulty-hint {
+  margin: 0.45rem 0 0;
+  color: var(--navy);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
 .control-list {
   display: flex;
   flex-direction: column;
@@ -251,6 +345,146 @@ kbd {
   width: 100%;
 }
 
+.score-save-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+  text-align: left;
+}
+
+.score-save-label {
+  color: var(--navy);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#player-name-input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.7rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+}
+
+.score-save-status {
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--navy);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.score-save-status.is-error {
+  color: var(--red);
+}
+
+.score-save-status.is-success {
+  color: var(--dark-green);
+}
+
+.score-save-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.score-save-actions .button {
+  width: 100%;
+}
+
+.menu-panel--hof {
+  max-width: 36rem;
+  align-items: stretch;
+  text-align: left;
+}
+
+.hof-note {
+  margin: 0;
+  color: var(--navy);
+  font-size: 0.9rem;
+}
+
+.hof-difficulty {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hof-difficulty .button {
+  flex: 1;
+}
+
+.hof-difficulty .button.is-selected {
+  color: var(--navy);
+  background: var(--yellow);
+  border-color: var(--navy);
+}
+
+.hof-board {
+  width: 100%;
+}
+
+.hof-board h2 {
+  margin: 0 0 0.4rem;
+  color: var(--navy);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.hof-empty {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  color: var(--navy);
+  background: var(--peach);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.hof-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hof-list li {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--light-gray);
+  overflow-wrap: anywhere;
+}
+
+.hof-rank {
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.hof-name {
+  min-width: 0;
+  font-weight: 700;
+}
+
+.hof-value {
+  color: var(--dark-green);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#hof-back-button {
+  width: 100%;
+}
+
 /* Game over stats. Grid puts each label beside its value. */
 .results-list {
   display: grid;
@@ -272,6 +506,7 @@ kbd {
 .results-list dt {
   color: var(--navy);
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .results-list dd {
@@ -284,12 +519,29 @@ kbd {
   color: var(--terracotta);
 }
 
+#final-money,
+#total-money-earned {
+  color: var(--dark-green);
+}
+
+.brand-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.15rem 0 0;
+}
+
 .learn-more-link {
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
   color: var(--navy);
+  font-family: var(--brand-font);
   font-weight: 800;
 }
 
-.learn-more-link:hover {
+.learn-more-link:hover,
+.learn-more-link:focus-visible {
   color: var(--terracotta);
 }
 
@@ -302,6 +554,7 @@ kbd {
   overflow: hidden;
   background: var(--hud);
   color: var(--cream);
+  touch-action: none;
 }
 
 /* Score and timer stay on one row: left, center, and right. */
@@ -326,6 +579,79 @@ kbd {
   justify-self: end;
 }
 
+.hud-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.audio-controls {
+  position: fixed;
+  z-index: 40;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  max-width: min(16rem, calc(100vw - 1rem));
+}
+
+body.is-playing .audio-controls {
+  top: 3.55rem;
+}
+
+.audio-control-row {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.audio-button {
+  min-height: 2.2rem;
+  padding: 0.25rem 0.55rem;
+  color: var(--ink);
+  background: var(--yellow);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.audio-controls.is-muted .audio-button:first-child {
+  color: var(--cream);
+  background: var(--navy);
+  border-color: var(--yellow);
+}
+
+.audio-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 12.5rem;
+  padding: 0.55rem 0.65rem;
+  color: var(--ink);
+  background: rgba(255, 247, 225, 0.96);
+  border: 2px solid var(--navy);
+  border-radius: 8px;
+}
+
+.audio-panel[hidden] {
+  display: none;
+}
+
+.audio-slider-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.audio-slider-label input[type="range"] {
+  width: 100%;
+}
+
 .hud-stat {
   display: flex;
   align-items: baseline;
@@ -340,10 +666,42 @@ kbd {
   text-transform: uppercase;
 }
 
+#score-display {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
 #score-value {
   color: var(--yellow);
   font-size: 1.35rem;
   font-weight: 800;
+}
+
+.money-value {
+  color: var(--green);
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.difficulty-badge {
+  margin-left: 0.35rem;
+  padding: 0.08rem 0.38rem;
+  color: var(--yellow);
+  border: 1px solid var(--yellow);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+.difficulty-badge.is-hard {
+  color: var(--orange);
+  border-color: var(--orange);
 }
 
 #survival-timer,
@@ -358,7 +716,7 @@ kbd {
   font-weight: 800;
 }
 
-/* Health and water sit side by side and wrap on very narrow screens. */
+/* Health, fuel, and water sit side by side and wrap on very narrow screens. */
 .hud--bottom {
   display: flex;
   flex-wrap: wrap;
@@ -369,20 +727,32 @@ kbd {
   padding: 0.55rem 0.75rem;
 }
 
+.status-bars {
+  display: flex;
+  flex: 1 1 18rem;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  min-width: 0;
+}
+
 .health-display,
+.fuel-display,
 .water-capacity {
   display: flex;
   align-items: center;
   gap: 0.45rem;
 }
 
-.health-display {
-  flex: 1 1 12rem;
+.health-display,
+.fuel-display {
+  flex: 1 1 8rem;
+  min-width: 0;
 }
 
-.health-bar {
+.health-bar,
+.fuel-bar {
   flex: 1;
-  min-width: 5rem;
+  min-width: 4.5rem;
   height: 1rem;
   overflow: hidden;
   background: var(--light-gray);
@@ -397,9 +767,25 @@ kbd {
   background: var(--green);
 }
 
+.fuel-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--green);
+}
+
+.fuel-fill--caution {
+  background: var(--yellow);
+}
+
+.fuel-fill--critical {
+  background: var(--red);
+}
+
 #health-value,
+#fuel-value,
 #water-count {
   font-weight: 800;
+  min-width: 2.6rem;
 }
 
 #water-count {
@@ -456,6 +842,18 @@ kbd {
   touch-action: none;
 }
 
+/* The playable swamp is larger than the viewport. JavaScript slides this layer. */
+.world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 452.55%;
+  height: 452.55%;
+  background: var(--swamp);
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
 .water-zone {
   position: absolute;
   z-index: 1;
@@ -466,12 +864,10 @@ kbd {
   overflow: hidden;
 }
 
-/* Orange muddy pond versus blue clean pond. Irregular radii make the outline look natural. */
+/* Pond size is a share of the large world so it still looks like one screen of swamp. */
 .water-zone--contaminated {
-  left: 4%;
-  top: 10%;
-  width: 42%;
-  height: 52%;
+  width: 13.2%;
+  height: 16.4%;
   background:
     radial-gradient(ellipse at 36% 30%, #ffb056 0 22%, var(--orange) 50%, #c45c14 100%);
   border: none;
@@ -482,10 +878,9 @@ kbd {
 }
 
 .water-zone--clean {
-  right: 4%;
-  top: 18%;
-  width: 30%;
-  height: 40%;
+  width: 14%;
+  height: 17.5%;
+  overflow: visible;
   background:
     radial-gradient(ellipse at 42% 38%, #6ec4ff 0 26%, var(--blue) 64%, #1a7fd4 100%);
   border: none;
@@ -495,21 +890,24 @@ kbd {
     inset 0 0.35rem 1rem rgba(12, 55, 100, 0.22);
 }
 
+.pond-shape-2 {
+  border-radius: 46% 68% 52% 40% / 58% 42% 62% 44%;
+}
+
+.pond-shape-3 {
+  border-radius: 64% 40% 58% 70% / 48% 60% 42% 56%;
+}
+
+.pond-shape-4 {
+  border-radius: 38% 58% 44% 62% / 52% 36% 64% 48%;
+}
+
+.pond-shape-5 {
+  border-radius: 58% 52% 40% 48% / 44% 66% 38% 60%;
+}
+
 .zone-label {
-  position: absolute;
-  z-index: 3;
-  left: 50%;
-  bottom: 20%;
-  max-width: 78%;
-  padding: 0.2rem 0.45rem;
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
-  transform: translateX(-50%);
+  display: none;
 }
 
 .puddle,
@@ -695,15 +1093,25 @@ kbd {
   transform: rotate(-15deg);
 }
 
-/* House, island, dock, sign, and cans stay grouped inside the blue zone. */
+/* House, island, dock, sign, and cans sit on the pond, not outside the water. */
 .community-cluster {
   position: absolute;
   z-index: 2;
-  top: 8%;
-  left: 48%;
+  top: auto;
+  bottom: 22%;
+  left: 50%;
   width: 11.6rem;
   height: 8.4rem;
-  transform: translateX(-40%);
+  transform: translateX(-50%) scale(1.45);
+  transform-origin: 50% 80%;
+  pointer-events: none;
+}
+
+.community-cluster--south {
+  left: 50%;
+  bottom: 20%;
+  transform: translateX(-50%) scale(1.45);
+  transform-origin: 50% 80%;
 }
 
 .community-island {
@@ -824,17 +1232,200 @@ kbd {
   position: absolute;
   top: 0;
   left: 50%;
+  box-sizing: border-box;
   width: max-content;
-  padding: 0.28rem 0.55rem;
+  min-width: 7.1rem;
+  padding: 0.2rem 0.5rem;
   color: var(--ink);
   background: var(--yellow);
   border: 2px solid var(--ink);
-  font-size: 0.72rem;
+  font-family: var(--brand-font);
+  font-size: 0.58rem;
   font-weight: 800;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   line-height: 1;
   text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.fueling-station {
+  position: absolute;
+  z-index: 2;
+  overflow: visible;
+}
+
+.fuel-island {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 40% 34%, #d4b06a 0 26%, #c4964a 52%, #8a6a32 100%);
+  border-radius: 58% 42% 62% 48% / 50% 60% 40% 54%;
+  box-shadow:
+    0 0 0 0.35rem #5a7a28,
+    inset 0 0.4rem 0.8rem rgba(90, 50, 12, 0.22);
+}
+
+.fuel-dock {
+  position: absolute;
+  z-index: 1;
+  left: 4%;
+  bottom: 18%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  width: 38%;
+  padding: 0.18rem 0.22rem;
+  background: #8a5a2b;
+  border: 2px solid #4a2c14;
+  border-radius: 4px;
+}
+
+.fuel-plank {
+  display: block;
+  height: 0.14rem;
+  background: #c48a48;
+  border-radius: 2px;
+}
+
+.fuel-post {
+  position: absolute;
+  bottom: -0.28rem;
+  width: 0.22rem;
+  height: 0.42rem;
+  background: #5a3a14;
+}
+
+.fuel-post--left {
+  left: 0.28rem;
+}
+
+.fuel-post--right {
+  right: 0.4rem;
+}
+
+.fuel-tank {
+  position: absolute;
+  z-index: 2;
+  right: 18%;
+  top: 16%;
+  width: 28%;
+  height: 46%;
+}
+
+.fuel-tank-body {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 18%;
+  bottom: 0;
+  background: var(--navy);
+  border: 2px solid var(--ink);
+  border-radius: 40% 40% 18% 18% / 12% 12% 18% 18%;
+}
+
+.fuel-tank-cap {
+  position: absolute;
+  left: 32%;
+  right: 32%;
+  top: 0;
+  height: 22%;
+  background: #1a4a7a;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+}
+
+.fuel-tank-band {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 48%;
+  height: 16%;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+}
+
+.fuel-pump {
+  position: absolute;
+  z-index: 3;
+  left: 28%;
+  top: 22%;
+  width: 24%;
+  height: 52%;
+}
+
+.fuel-pump-body {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 12%;
+  bottom: 0;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 4px 4px 2px 2px;
+}
+
+.fuel-pump-window {
+  position: absolute;
+  left: 32%;
+  right: 32%;
+  top: 28%;
+  height: 22%;
+  background: var(--muted-blue);
+  border: 2px solid var(--ink);
+}
+
+.fuel-hose {
+  position: absolute;
+  right: -18%;
+  top: 38%;
+  width: 28%;
+  height: 38%;
+  border-right: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  border-radius: 0 0 10px 0;
+}
+
+.fuel-nozzle {
+  position: absolute;
+  right: -22%;
+  bottom: 8%;
+  width: 22%;
+  height: 16%;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+}
+
+.fuel-sign {
+  position: absolute;
+  z-index: 4;
+  left: 52%;
+  top: 2%;
+  transform: translateX(-50%);
+}
+
+.fuel-sign-post {
+  display: block;
+  width: 0.22rem;
+  height: 1.15rem;
+  margin: 0 auto;
+  background: #6b4423;
+}
+
+.fuel-sign-board {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  padding: 0.12rem 0.38rem;
+  color: var(--ink);
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
   white-space: nowrap;
   transform: translateX(-50%);
 }
@@ -1086,14 +1677,178 @@ kbd {
   background: #ff902a;
 }
 
+.scenery-tree--f {
+  left: 86%;
+  top: 44%;
+  width: 2.6rem;
+  height: 3.3rem;
+}
+
+.scenery-tree--g {
+  left: 34%;
+  top: 56%;
+  width: 2.9rem;
+  height: 3.6rem;
+}
+
+.scenery-tree--h {
+  left: 63%;
+  top: 84%;
+  width: 2.3rem;
+  height: 3rem;
+}
+
+.scenery-bush--e {
+  left: 82%;
+  top: 16%;
+}
+
+.scenery-bush--f {
+  left: 16%;
+  top: 84%;
+}
+
+.scenery-grass--e {
+  left: 26%;
+  top: 88%;
+}
+
+.scenery-reeds--d {
+  left: 60%;
+  top: 32%;
+}
+
+.scenery-flower--d {
+  left: 90%;
+  top: 72%;
+  background: var(--yellow);
+}
+
+.scenery-patch {
+  position: absolute;
+  background: radial-gradient(ellipse at 40% 40%, #3d9a55 0 40%, #267a3c 100%);
+  border-radius: 60% 40% 55% 45%;
+  opacity: 0.55;
+}
+
+.scenery-patch--a {
+  left: 30%;
+  top: 24%;
+  width: 8%;
+  height: 6%;
+}
+
+.scenery-patch--b {
+  left: 68%;
+  top: 54%;
+  width: 7%;
+  height: 8%;
+  border-radius: 42% 58% 40% 60%;
+}
+
+.scenery-patch--c {
+  left: 12%;
+  top: 58%;
+  width: 9%;
+  height: 5%;
+}
+
+.health-pickup {
+  position: absolute;
+  z-index: 4;
+  width: 2.45rem;
+  height: 2.45rem;
+  pointer-events: none;
+}
+
+.health-pickup-box {
+  position: absolute;
+  inset: 0.12rem;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  border-radius: 5px;
+  box-shadow: 0 0.18rem 0 #9a3a28;
+}
+
+.health-pickup-cross {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: 0.48rem;
+  height: 1.28rem;
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}
+
+.health-pickup-cross::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1.28rem;
+  height: 0.48rem;
+  background: var(--red);
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+}
+
+.health-pickup-amount {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: -0.08rem;
+  transform: translateX(-50%);
+  padding: 0 0.18rem;
+  color: var(--cream);
+  background: var(--navy);
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.health-pickup--small {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.health-pickup--small .health-pickup-box {
+  background: #8ee06a;
+  box-shadow: 0 0.14rem 0 #2f6b1f;
+}
+
+.health-pickup--small .health-pickup-cross,
+.health-pickup--small .health-pickup-cross::after {
+  background: #1f7a3a;
+}
+
+.health-pickup--small .health-pickup-cross {
+  width: 0.34rem;
+  height: 0.9rem;
+}
+
+.health-pickup--small .health-pickup-cross::after {
+  width: 0.9rem;
+  height: 0.34rem;
+}
+
+.health-pickup--small .health-pickup-amount {
+  background: #1f5c2e;
+  font-size: 0.52rem;
+}
+
 .obstacle {
   position: absolute;
   z-index: 2;
 }
 
 .obstacle--rock {
-  left: 62%;
-  top: 32%;
   width: 5.5rem;
   height: 6.5rem;
   background: #6d645c;
@@ -1102,8 +1857,6 @@ kbd {
 }
 
 .obstacle--log {
-  left: 30%;
-  top: 70%;
   width: 13rem;
   height: 2.5rem;
   background: #7a4b27;
@@ -1112,11 +1865,22 @@ kbd {
 }
 
 .obstacle--tree {
-  left: 8%;
-  top: 44%;
   width: 4.2rem;
   height: 5.2rem;
 }
+
+.ob-1 { left: 18%; top: 20%; }
+.ob-2 { left: 58%; top: 10%; }
+.ob-3 { left: 28%; top: 58%; }
+.ob-4 { left: 84%; top: 48%; }
+.ob-5 { left: 36%; top: 30%; }
+.ob-6 { left: 80%; top: 28%; }
+.ob-7 { left: 14%; top: 78%; }
+.ob-8 { left: 62%; top: 80%; }
+.ob-9 { left: 10%; top: 48%; }
+.ob-10 { left: 48%; top: 50%; }
+.ob-11 { left: 88%; top: 62%; }
+.ob-12 { left: 72%; top: 16%; }
 
 .tree-canopy {
   position: absolute;
@@ -1147,6 +1911,48 @@ kbd {
   top: 38%;
   width: 5rem;
   height: 6.4rem;
+}
+
+#helicopter {
+  z-index: 4;
+}
+
+.helicopter--enemy {
+  z-index: 3;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.helicopter--enemy .helicopter-body {
+  background: #8b1e1e;
+}
+
+.helicopter--enemy .helicopter-tail {
+  background: #4a4a4a;
+}
+
+.helicopter--enemy .helicopter-window {
+  background: #fed8c1;
+}
+
+.helicopter--enemy .helicopter-rotor {
+  background: rgba(70, 18, 18, 0.38);
+  border-color: #d0d0d0;
+}
+
+.helicopter--enemy .helicopter-tail-rotor {
+  background: #c8c8c8;
+}
+
+.helicopter-facing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+  transition: transform 0.12s ease-out;
 }
 
 .helicopter--hit {
@@ -1209,24 +2015,416 @@ kbd {
   border-radius: 999px;
 }
 
+/* ---------- Minimap ---------- */
+
+.minimap {
+  position: absolute;
+  z-index: 8;
+  left: 0.7rem;
+  bottom: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  width: 8.6rem;
+  padding: 0.35rem;
+  color: var(--cream);
+  background: rgba(0, 51, 102, 0.88);
+  border: 2px solid var(--yellow);
+  border-radius: 10px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.minimap-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.minimap-title {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.minimap-toggle {
+  margin: 0;
+  padding: 0.15rem 0.4rem;
+  color: var(--ink);
+  background: var(--yellow);
+  border: 2px solid var(--navy);
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.minimap-stage {
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #1f6b3a;
+  border: 2px solid rgba(255, 247, 225, 0.35);
+  border-radius: 6px;
+}
+
+.minimap-world {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(90, 180, 110, 0.35), transparent 40%),
+    #247a42;
+}
+
+.minimap-pond,
+.minimap-house,
+.minimap-pump,
+.minimap-health,
+.minimap-view,
+.minimap-heli {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.minimap-pond--dirty {
+  background: #c45c14;
+  border: 1px solid rgba(26, 26, 26, 0.45);
+  border-radius: 50%;
+}
+
+.minimap-pond--cleaned {
+  background: var(--blue);
+}
+
+.minimap-house {
+  z-index: 2;
+  width: 0.7rem;
+  height: 0.78rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.minimap-house::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 0.34rem;
+  background: #c44b2e;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.minimap-house::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 0;
+  height: 0.46rem;
+  background: #f4efe4;
+  border: 1px solid #2a2118;
+  border-top: none;
+}
+
+.minimap-pump {
+  z-index: 2;
+  width: 0.42rem;
+  height: 0.7rem;
+  background: var(--navy);
+  border: 1px solid var(--ink);
+  border-radius: 2px 2px 1px 1px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.minimap-pump::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0.12rem;
+  width: 0.18rem;
+  height: 0.16rem;
+  background: var(--yellow);
+  border: 1px solid var(--ink);
+  transform: translateX(-50%);
+}
+
+.minimap-pump::after {
+  content: "";
+  position: absolute;
+  right: -0.18rem;
+  top: 0.2rem;
+  width: 0.16rem;
+  height: 0.32rem;
+  border-right: 2px solid var(--yellow);
+  border-bottom: 2px solid var(--yellow);
+  border-radius: 0 0 3px 0;
+}
+
+.minimap-view {
+  z-index: 2;
+  border: 2px solid var(--yellow);
+  background: rgba(255, 201, 7, 0.12);
+  pointer-events: none;
+}
+
+.minimap-heli {
+  z-index: 3;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--yellow);
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.minimap-enemy {
+  position: absolute;
+  z-index: 3;
+  width: 0.38rem;
+  height: 0.38rem;
+  background: #8b1e1e;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.minimap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.minimap-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.legend-swatch--heli {
+  background: var(--yellow);
+  border: 1px solid var(--ink);
+}
+
+.legend-swatch--dirty {
+  background: var(--orange);
+}
+
+.legend-swatch--house {
+  position: relative;
+  background: transparent;
+  border-radius: 0;
+}
+
+.legend-swatch--house::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 0.28rem;
+  background: #c44b2e;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.legend-swatch--house::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 0;
+  height: 0.3rem;
+  background: #f4efe4;
+  border: 1px solid #2a2118;
+  border-top: none;
+}
+
+.legend-swatch--fuel {
+  background: var(--navy);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+}
+
+.legend-swatch--health {
+  position: relative;
+  background: var(--cream);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+}
+
+.legend-swatch--health::before,
+.legend-swatch--health::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: var(--red);
+  transform: translate(-50%, -50%);
+}
+
+.legend-swatch--health::before {
+  width: 2px;
+  height: 70%;
+}
+
+.legend-swatch--health::after {
+  width: 70%;
+  height: 2px;
+}
+
+.legend-swatch--view {
+  border-radius: 2px;
+  border: 2px solid var(--yellow);
+  background: transparent;
+}
+
+.minimap--expanded {
+  left: 0.7rem;
+  bottom: 0.7rem;
+  top: auto;
+  width: min(28rem, calc(100% - 1.4rem));
+  max-height: calc(100% - 1.4rem);
+  padding: 0.55rem;
+  transform: none;
+}
+
+.minimap--expanded .minimap-title {
+  font-size: 0.85rem;
+}
+
+.minimap--expanded .minimap-heli {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.minimap--expanded .minimap-enemy {
+  width: 0.55rem;
+  height: 0.55rem;
+}
+
+.minimap--expanded .minimap-house {
+  width: 1.05rem;
+  height: 1.16rem;
+}
+
+.minimap--expanded .minimap-house::before {
+  height: 0.5rem;
+}
+
+.minimap--expanded .minimap-house::after {
+  height: 0.68rem;
+}
+
+.minimap--expanded .minimap-pump {
+  width: 0.62rem;
+  height: 1.05rem;
+}
+
+.minimap-health {
+  z-index: 3;
+  width: 0.52rem;
+  height: 0.52rem;
+  background: var(--cream);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.minimap-health::before,
+.minimap-health::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: var(--red);
+  transform: translate(-50%, -50%);
+}
+
+.minimap-health::before {
+  width: 2px;
+  height: 70%;
+}
+
+.minimap-health::after {
+  width: 70%;
+  height: 2px;
+}
+
+.minimap--expanded .minimap-health {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+
+.minimap-health--small {
+  width: 0.36rem;
+  height: 0.36rem;
+  background: #8ee06a;
+  border-radius: 50%;
+}
+
+.minimap-health--small::before,
+.minimap-health--small::after {
+  background: #1f5c2e;
+}
+
+.minimap--expanded .minimap-health--small {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.minimap--expanded .minimap-stage {
+  max-height: min(22rem, calc(100% - 3.6rem));
+}
+
 /* ---------- Mobile overlay controls ---------- */
 
-/* Sits on top of the swamp: D-pad bottom-left, Clean and Pause bottom-right. */
+/* Sits on top of the swamp: D-pad bottom-left, Clean and Pause bottom-right.
+   Hidden on mouse-only pointers. Shown when any coarse/touch pointer exists. */
 .mobile-controls {
   position: absolute;
   z-index: 10;
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
+  display: none;
   align-items: flex-end;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.45rem 0.5rem calc(0.45rem + env(safe-area-inset-bottom));
+  padding: 0.45rem max(0.5rem, env(safe-area-inset-right)) calc(0.45rem + env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
   pointer-events: none;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+@media (any-pointer: coarse) {
+  .mobile-controls {
+    display: flex;
+  }
+}
+
+html.has-touch-input .mobile-controls {
+  display: flex;
 }
 
 .direction-pad {
@@ -1282,8 +2480,10 @@ kbd {
 .action-buttons {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 0.45rem;
-  width: 4.75rem;
+  width: 6.75rem;
+  flex-shrink: 0;
   padding: 0.4rem;
   background: rgba(18, 50, 71, 0.42);
   border-radius: 16px;
@@ -1293,6 +2493,9 @@ kbd {
 .action-buttons .control-button {
   width: 100%;
   min-height: 2.75rem;
+  padding: 0.3rem 0.45rem;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .control-button--clean {
@@ -1300,6 +2503,8 @@ kbd {
   color: var(--ink);
   background: rgba(46, 157, 247, 0.9);
   border-color: var(--ink);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
 }
 
 .control-button--pause {
@@ -1324,6 +2529,27 @@ kbd {
 /* ---------- Narrow screens ---------- */
 
 @media (max-width: 767px) {
+  .minimap {
+    left: 0.4rem;
+    bottom: auto;
+    top: 0.4rem;
+    width: 6.8rem;
+    padding: 0.28rem;
+  }
+
+  .minimap--expanded {
+    left: 50%;
+    top: 0.35rem;
+    bottom: auto;
+    width: calc(100% - 0.8rem);
+    max-height: none;
+    transform: translateX(-50%);
+  }
+
+  .minimap--expanded .minimap-stage {
+    max-height: 42vh;
+  }
+
   #start-screen {
     background-position: center 8%;
   }
@@ -1334,16 +2560,23 @@ kbd {
     background-position: 30% 0;
   }
 
+  .results-list {
+    gap: 0.5rem 0.65rem;
+    font-size: 0.92rem;
+  }
+
   .scenery-lg {
     display: none;
   }
 
   .community-cluster {
-    top: 10%;
+    top: auto;
+    bottom: 20%;
     left: 50%;
     width: 7.1rem;
     height: 5.4rem;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(1.35);
+    transform-origin: 50% 80%;
   }
 
   .community-island {
@@ -1398,8 +2631,11 @@ kbd {
   }
 
   .community-sign-board {
-    padding: 0.14rem 0.28rem;
-    font-size: 0.4rem;
+    width: max-content;
+    min-width: 6.1rem;
+    padding: 0.12rem 0.36rem;
+    font-size: 0.42rem;
+    white-space: nowrap;
   }
 
   .scenery-can--1,
@@ -1440,6 +2676,11 @@ kbd {
     column-gap: 0.35rem;
   }
 
+  body.is-playing .audio-controls {
+    top: 3.15rem;
+    right: 0.35rem;
+  }
+
   .hud--bottom {
     padding: 0.3rem 0.5rem;
     gap: 0.3rem 0.55rem;
@@ -1454,14 +2695,40 @@ kbd {
     font-size: 1.1rem;
   }
 
+  .money-value {
+    font-size: 0.95rem;
+  }
+
+  .health-pickup {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .health-pickup--small {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .difficulty-badge {
+    margin-left: 0.25rem;
+    font-size: 0.55rem;
+    padding: 0.04rem 0.28rem;
+  }
+
   .button--pause {
     min-height: 2.2rem;
     padding: 0.2rem 0.55rem;
     font-size: 0.85rem;
   }
 
-  .health-display {
-    flex: 1 1 8rem;
+  .status-bars {
+    flex: 1 1 100%;
+    gap: 0.45rem 0.7rem;
+  }
+
+  .health-display,
+  .fuel-display {
+    flex: 1 1 7rem;
     min-width: 0;
     gap: 0.3rem;
   }
@@ -1474,7 +2741,8 @@ kbd {
     width: 22px;
   }
 
-  .health-bar {
+  .health-bar,
+  .fuel-bar {
     height: 0.7rem;
     min-width: 3.25rem;
   }
@@ -1489,21 +2757,6 @@ kbd {
     line-height: 1.25;
   }
 
-  .water-zone--contaminated {
-    top: 6%;
-    width: 44%;
-    height: 42%;
-    border-radius: 66% 50% 56% 46% / 52% 58% 42% 50%;
-  }
-
-  .water-zone--clean {
-    top: 10%;
-    right: 3%;
-    width: 40%;
-    height: 34%;
-    border-radius: 52% 60% 48% 56% / 56% 46% 58% 50%;
-  }
-
   .zone-label {
     bottom: 16%;
     max-width: 70%;
@@ -1512,22 +2765,16 @@ kbd {
   }
 
   .obstacle--rock {
-    left: 60%;
-    top: 28%;
     width: 3.1rem;
     height: 3.5rem;
   }
 
   .obstacle--log {
-    left: 32%;
-    top: 54%;
     width: 7rem;
     height: 1.45rem;
   }
 
   .obstacle--tree {
-    left: 10%;
-    top: 38%;
     width: 2.5rem;
     height: 3.1rem;
   }
@@ -1602,13 +2849,21 @@ kbd {
     background-position: 28% 0;
   }
 
+  .results-list {
+    gap: 0.42rem 0.5rem;
+    font-size: 0.86rem;
+  }
+
   .community-sign {
-    display: none;
+    top: 1.35rem;
+    left: 0.85rem;
   }
 
   .community-cluster {
     width: 6.6rem;
     height: 5rem;
+    transform: translateX(-50%) scale(1.3);
+    transform-origin: 50% 80%;
   }
 
   .community-island {
@@ -1617,8 +2872,11 @@ kbd {
   }
 
   .community-sign-board {
-    padding: 0.16rem 0.32rem;
-    font-size: 0.46rem;
+    width: max-content;
+    min-width: 5.5rem;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.38rem;
+    white-space: nowrap;
   }
 
   .obstacle--rock {
@@ -1642,7 +2900,7 @@ kbd {
   }
 
   .action-buttons {
-    width: 4.35rem;
+    width: 6.5rem;
   }
 }
 
@@ -1654,7 +2912,7 @@ kbd {
   }
 
   .action-buttons {
-    width: 5rem;
+    width: 7rem;
   }
 }
 
@@ -1673,7 +2931,8 @@ kbd {
   }
 }
 
-/* Desktop: large playfield, keyboard instructions in a row, no touch pad. */
+/* Desktop and large tablets: large playfield and keyboard-friendly menus.
+   Touch overlays stay visible when the device has a coarse pointer. */
 @media (min-width: 768px) {
   .brand-lockup img {
     width: min(20rem, 100%);
@@ -1713,6 +2972,19 @@ kbd {
     min-width: 10rem;
   }
 
+  .score-save-actions {
+    flex-direction: row;
+  }
+
+  .score-save-actions .button {
+    width: auto;
+    flex: 1;
+  }
+
+  .menu-panel--hof {
+    max-width: 42rem;
+  }
+
   .zone-label {
     font-size: 0.95rem;
   }
@@ -1727,7 +2999,170 @@ kbd {
     font-size: 1.75rem;
   }
 
-  .mobile-controls {
-    display: none;
+  .money-value {
+    font-size: 1.45rem;
+  }
+}
+
+/* Keep the minimap above the D-pad on every touchscreen, including tablets. */
+@media (any-pointer: coarse) {
+  .minimap {
+    bottom: auto;
+    top: 0.4rem;
+  }
+
+  .minimap--expanded {
+    left: 50%;
+    top: 0.35rem;
+    bottom: auto;
+    transform: translateX(-50%);
+    max-height: calc(100% - 8.5rem);
+  }
+}
+
+html.has-touch-input .minimap {
+  bottom: auto;
+  top: 0.4rem;
+}
+
+html.has-touch-input .minimap--expanded {
+  left: 50%;
+  top: 0.35rem;
+  bottom: auto;
+  transform: translateX(-50%);
+  max-height: calc(100% - 8.5rem);
+}
+
+/* Tablets, unfolded foldables, and touchscreen laptops. */
+@media (any-pointer: coarse) and (min-width: 768px) {
+  .minimap {
+    left: 0.7rem;
+    top: 0.7rem;
+    width: 8.6rem;
+    padding: 0.35rem;
+  }
+
+  .minimap--expanded {
+    width: min(28rem, calc(100% - 1.4rem));
+  }
+
+  .direction-pad {
+    grid-template-columns: repeat(3, 3.25rem);
+    grid-template-rows: repeat(3, 3.25rem);
+  }
+
+  .action-buttons {
+    width: 8.25rem;
+  }
+
+  .action-buttons .control-button {
+    min-height: 3rem;
+  }
+
+  .control-button--clean {
+    min-height: 3.4rem;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  html.has-touch-input .minimap {
+    left: 0.7rem;
+    top: 0.7rem;
+    width: 8.6rem;
+    padding: 0.35rem;
+  }
+
+  html.has-touch-input .minimap--expanded {
+    width: min(28rem, calc(100% - 1.4rem));
+  }
+
+  html.has-touch-input .direction-pad {
+    grid-template-columns: repeat(3, 3.25rem);
+    grid-template-rows: repeat(3, 3.25rem);
+  }
+
+  html.has-touch-input .action-buttons {
+    width: 8.25rem;
+  }
+
+  html.has-touch-input .action-buttons .control-button {
+    min-height: 3rem;
+  }
+
+  html.has-touch-input .control-button--clean {
+    min-height: 3.4rem;
+    font-size: 1rem;
+  }
+}
+
+@media (any-pointer: coarse) and (min-width: 1024px) {
+  .direction-pad {
+    grid-template-columns: repeat(3, 3.4rem);
+    grid-template-rows: repeat(3, 3.4rem);
+  }
+
+  .action-buttons {
+    width: 8.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  html.has-touch-input .direction-pad {
+    grid-template-columns: repeat(3, 3.4rem);
+    grid-template-rows: repeat(3, 3.4rem);
+  }
+
+  html.has-touch-input .action-buttons {
+    width: 8.75rem;
+  }
+}
+
+@media (max-height: 500px) {
+  html.has-touch-input .direction-pad {
+    grid-template-columns: repeat(3, 2.5rem);
+    grid-template-rows: repeat(3, 2.5rem);
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  html.has-touch-input .action-buttons {
+    width: 6.75rem;
+    gap: 0.3rem;
+    padding: 0.3rem;
+  }
+
+  html.has-touch-input .action-buttons .control-button {
+    min-height: 2.4rem;
+  }
+
+  html.has-touch-input .control-button--clean {
+    min-height: 2.6rem;
+    font-size: 0.82rem;
+  }
+}
+
+/* Short landscape phones, foldables, and tablets: keep the overlay compact. */
+@media (any-pointer: coarse) and (max-height: 500px) {
+  .direction-pad {
+    grid-template-columns: repeat(3, 2.5rem);
+    grid-template-rows: repeat(3, 2.5rem);
+    gap: 0.25rem;
+    padding: 0.25rem;
+  }
+
+  .action-buttons {
+    width: 6.75rem;
+    gap: 0.3rem;
+    padding: 0.3rem;
+  }
+
+  .action-buttons .control-button {
+    min-height: 2.4rem;
+  }
+
+  .control-button--clean {
+    min-height: 2.6rem;
+    font-size: 0.82rem;
   }
 }

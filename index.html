@@ -22,20 +22,42 @@
         <h1 id="game-title" class="screen-title">HELO-SWAMPS</h1>
         <p id="game-subtitle" class="subtitle">Clean Water. Higher Scores.</p>
         <p id="game-description" class="description">
-          Pilot a helicopter over the swamp. Clean contaminated water, deliver it to
-          communities, and build the highest score you can before your health runs out.
+          Pilot a helicopter over the swamp. Clean contaminated ponds, deliver water to
+          village communities for cash, pay $10 to refuel, collect health crates, and dodge
+          enemy helicopters. Score as many points as you can before your health or fuel runs out.
         </p>
 
+        <fieldset class="difficulty-select">
+          <legend id="difficulty-heading">Difficulty</legend>
+          <div class="difficulty-options" role="presentation">
+            <label class="difficulty-option is-selected">
+              <input type="radio" name="difficulty" id="difficulty-easy" value="easy" checked>
+              <span>EASY</span>
+            </label>
+            <label class="difficulty-option">
+              <input type="radio" name="difficulty" id="difficulty-hard" value="hard">
+              <span>HARD</span>
+            </label>
+          </div>
+          <p class="difficulty-hint">Hard adds more obstacles, extra enemy helicopters, and faster fuel drain.</p>
+        </fieldset>
+
         <button id="start-button" class="button button--primary" type="button">Start Game</button>
+        <button id="start-hof-button" class="button button--secondary" type="button">Hall of Fame</button>
 
         <div class="controls-help">
           <h2 id="controls-heading">Controls</h2>
           <ul id="control-list" class="control-list" aria-labelledby="controls-heading">
             <li><kbd>WASD</kbd> / <kbd>Arrow Keys</kbd> — Move</li>
-            <li><kbd>Space</kbd> — Clean Water</li>
+            <li><kbd>Space</kbd> — Clean, deliver, or refuel</li>
             <li><kbd>P</kbd> — Pause</li>
           </ul>
         </div>
+
+        <nav class="brand-links" aria-label="charity: water">
+          <a class="learn-more-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Visit charity: water</a>
+          <a class="learn-more-link" href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer">Donate to charity: water</a>
+        </nav>
       </div>
     </section>
 
@@ -49,123 +71,114 @@
         <p id="score-display" class="hud-stat">
           <span class="hud-label">Score</span>
           <span id="score-value">0</span>
+          <span id="money-value" class="money-value">$0</span>
+          <span id="difficulty-value" class="difficulty-badge">EASY</span>
         </p>
         <p id="timer-display" class="hud-stat">
           <span class="hud-label">Time</span>
           <span id="survival-timer">00:00</span>
         </p>
-        <button id="pause-button" class="button button--primary button--pause" type="button">Pause</button>
+        <div class="hud-actions">
+          <button id="pause-button" class="button button--primary button--pause" type="button">Pause</button>
+        </div>
       </header>
 
-      <!-- Swamp playfield. Objects are placed with CSS for now and will move later. -->
+      <!-- Visible swamp viewport. The larger world inside this box is moved by the camera. -->
       <div id="game-area" class="game-area" aria-label="Swamp gameplay area">
-        <div id="contaminated-zone" class="water-zone water-zone--contaminated" aria-label="Contaminated water">
-          <span class="puddle puddle--one" aria-hidden="true"></span>
-          <span class="puddle puddle--two" aria-hidden="true"></span>
-          <span class="puddle puddle--three" aria-hidden="true"></span>
-          <span class="puddle puddle--four" aria-hidden="true"></span>
-          <span class="zone-reed zone-reed--a" aria-hidden="true"></span>
-          <span class="zone-reed zone-reed--b" aria-hidden="true"></span>
-          <span class="zone-reed zone-reed--c scenery-md" aria-hidden="true"></span>
-          <span class="zone-mud-rock zone-mud-rock--a" aria-hidden="true"></span>
-          <span class="zone-mud-rock zone-mud-rock--b scenery-md" aria-hidden="true"></span>
-          <span class="zone-stick scenery-md" aria-hidden="true"></span>
-          <span class="zone-label">Contaminated Water</span>
-        </div>
-
-        <div id="delivery-zone" class="water-zone water-zone--clean" aria-label="Clean water delivery location">
-          <span class="ripple ripple--one" aria-hidden="true"></span>
-          <span class="ripple ripple--two" aria-hidden="true"></span>
-          <span class="ripple ripple--three scenery-md" aria-hidden="true"></span>
-          <span class="lily lily--one" aria-hidden="true"></span>
-          <span class="lily lily--two" aria-hidden="true"></span>
-          <span class="lily lily--three scenery-lg" aria-hidden="true"></span>
-
-          <div class="community-cluster" aria-hidden="true">
-            <div class="community-island"></div>
-            <div class="community-dock">
-              <span class="dock-plank"></span>
-              <span class="dock-plank"></span>
-              <span class="dock-plank"></span>
-              <span class="dock-post dock-post--left"></span>
-              <span class="dock-post dock-post--right"></span>
+        <div id="world" class="world">
+          <!-- Decorative swamp plants. These are not obstacles and do not collide. -->
+          <div class="scenery" aria-hidden="true">
+            <div class="scenery-tree scenery-tree--a">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
             </div>
-            <div class="community-marker">
-              <div class="community-roof"></div>
-              <div class="community-house">
-                <span class="community-window"></span>
-                <span class="community-door"></span>
+            <div class="scenery-tree scenery-tree--b">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--c scenery-md">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--d scenery-lg">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--e scenery-lg">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--f">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--g scenery-md">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <div class="scenery-tree scenery-tree--h scenery-lg">
+              <span class="scenery-tree-canopy"></span>
+              <span class="scenery-tree-trunk"></span>
+            </div>
+            <span class="scenery-bush scenery-bush--a"></span>
+            <span class="scenery-bush scenery-bush--b"></span>
+            <span class="scenery-bush scenery-bush--c scenery-lg"></span>
+            <span class="scenery-bush scenery-bush--d scenery-lg"></span>
+            <span class="scenery-bush scenery-bush--e"></span>
+            <span class="scenery-bush scenery-bush--f scenery-md"></span>
+            <span class="scenery-grass scenery-grass--a"></span>
+            <span class="scenery-grass scenery-grass--b"></span>
+            <span class="scenery-grass scenery-grass--c scenery-lg"></span>
+            <span class="scenery-grass scenery-grass--d scenery-lg"></span>
+            <span class="scenery-grass scenery-grass--e"></span>
+            <span class="scenery-reeds scenery-reeds--a"></span>
+            <span class="scenery-reeds scenery-reeds--b scenery-md"></span>
+            <span class="scenery-reeds scenery-reeds--c scenery-lg"></span>
+            <span class="scenery-reeds scenery-reeds--d"></span>
+            <span class="scenery-flower scenery-flower--a"></span>
+            <span class="scenery-flower scenery-flower--b scenery-lg"></span>
+            <span class="scenery-flower scenery-flower--c scenery-lg"></span>
+            <span class="scenery-flower scenery-flower--d"></span>
+            <span class="scenery-patch scenery-patch--a"></span>
+            <span class="scenery-patch scenery-patch--b"></span>
+            <span class="scenery-patch scenery-patch--c"></span>
+          </div>
+
+          <!-- Top-down helicopter: rotor, cabin, and tail. -->
+          <div id="helicopter" class="helicopter" role="img" aria-label="Helicopter">
+            <div class="helicopter-facing">
+              <div class="helicopter-rotor" aria-hidden="true"></div>
+              <div class="helicopter-tail" aria-hidden="true"></div>
+              <div class="helicopter-tail-rotor" aria-hidden="true"></div>
+              <div class="helicopter-body" aria-hidden="true">
+                <div class="helicopter-window"></div>
               </div>
             </div>
-            <div class="community-sign">
-              <span class="community-sign-post"></span>
-              <span class="community-sign-board">CLEAN WATER</span>
+          </div>
+        </div>
+
+        <aside id="minimap" class="minimap">
+          <div class="minimap-toolbar">
+            <p class="minimap-title">Map</p>
+            <button id="minimap-toggle" class="minimap-toggle" type="button" aria-expanded="false" aria-controls="minimap-stage">Expand</button>
+          </div>
+          <div id="minimap-stage" class="minimap-stage">
+            <div id="minimap-world" class="minimap-world">
+              <div id="minimap-view" class="minimap-view" title="Current view"></div>
+              <div id="minimap-heli" class="minimap-heli" title="Helicopter"></div>
             </div>
-            <img class="scenery-can scenery-can--1" src="img/water-can-transparent.png" alt="">
-            <img class="scenery-can scenery-can--2" src="img/water-can-transparent.png" alt="">
-            <img class="scenery-can scenery-can--3 scenery-md" src="img/water-can-transparent.png" alt="">
-            <img class="scenery-can scenery-can--4 scenery-lg" src="img/water-can-transparent.png" alt="">
           </div>
-          <span class="zone-label">Clean Water Delivery</span>
-        </div>
+          <ul class="minimap-legend" aria-label="Map legend">
+            <li><span class="legend-swatch legend-swatch--heli"></span> You</li>
+            <li><span class="legend-swatch legend-swatch--dirty"></span> Dirty</li>
+            <li><span class="legend-swatch legend-swatch--house"></span> Village</li>
+            <li><span class="legend-swatch legend-swatch--fuel"></span> Fuel</li>
+            <li><span class="legend-swatch legend-swatch--health"></span> Health</li>
+            <li><span class="legend-swatch legend-swatch--view"></span> View</li>
+          </ul>
+        </aside>
 
-        <!-- Decorative swamp plants. These are not obstacles and do not collide. -->
-        <div class="scenery" aria-hidden="true">
-          <div class="scenery-tree scenery-tree--a">
-            <span class="scenery-tree-canopy"></span>
-            <span class="scenery-tree-trunk"></span>
-          </div>
-          <div class="scenery-tree scenery-tree--b">
-            <span class="scenery-tree-canopy"></span>
-            <span class="scenery-tree-trunk"></span>
-          </div>
-          <div class="scenery-tree scenery-tree--c scenery-md">
-            <span class="scenery-tree-canopy"></span>
-            <span class="scenery-tree-trunk"></span>
-          </div>
-          <div class="scenery-tree scenery-tree--d scenery-lg">
-            <span class="scenery-tree-canopy"></span>
-            <span class="scenery-tree-trunk"></span>
-          </div>
-          <div class="scenery-tree scenery-tree--e scenery-lg">
-            <span class="scenery-tree-canopy"></span>
-            <span class="scenery-tree-trunk"></span>
-          </div>
-          <span class="scenery-bush scenery-bush--a"></span>
-          <span class="scenery-bush scenery-bush--b"></span>
-          <span class="scenery-bush scenery-bush--c scenery-lg"></span>
-          <span class="scenery-bush scenery-bush--d scenery-lg"></span>
-          <span class="scenery-grass scenery-grass--a"></span>
-          <span class="scenery-grass scenery-grass--b"></span>
-          <span class="scenery-grass scenery-grass--c scenery-lg"></span>
-          <span class="scenery-grass scenery-grass--d scenery-lg"></span>
-          <span class="scenery-reeds scenery-reeds--a"></span>
-          <span class="scenery-reeds scenery-reeds--b scenery-md"></span>
-          <span class="scenery-reeds scenery-reeds--c scenery-lg"></span>
-          <span class="scenery-flower scenery-flower--a"></span>
-          <span class="scenery-flower scenery-flower--b scenery-lg"></span>
-          <span class="scenery-flower scenery-flower--c scenery-lg"></span>
-        </div>
-
-        <!-- Obstacle placeholders. These will damage the helicopter in a later step. -->
-        <div id="obstacle-rock" class="obstacle obstacle--rock" title="Rock"></div>
-        <div id="obstacle-log" class="obstacle obstacle--log" title="Log"></div>
-        <div id="obstacle-tree" class="obstacle obstacle--tree" title="Tree">
-          <span class="tree-canopy"></span>
-          <span class="tree-trunk"></span>
-        </div>
-
-        <!-- Top-down helicopter placeholder: rotor, cabin, and tail. -->
-        <div id="helicopter" class="helicopter" role="img" aria-label="Helicopter">
-          <div class="helicopter-rotor" aria-hidden="true"></div>
-          <div class="helicopter-tail" aria-hidden="true"></div>
-          <div class="helicopter-tail-rotor" aria-hidden="true"></div>
-          <div class="helicopter-body" aria-hidden="true">
-            <div class="helicopter-window"></div>
-          </div>
-        </div>
-
-        <!-- Overlay D-pad and action buttons. Hidden on desktop with CSS. -->
+        <!-- Overlay D-pad and action buttons. Shown when the device has a touch / coarse pointer. -->
         <nav id="mobile-controls" class="mobile-controls" aria-label="Touch controls">
           <div id="direction-pad" class="direction-pad">
             <button id="move-up-button" class="control-button" type="button" aria-label="Move up">▲</button>
@@ -174,7 +187,7 @@
             <button id="move-right-button" class="control-button" type="button" aria-label="Move right">▶</button>
           </div>
           <div class="action-buttons">
-            <button id="clean-button" class="control-button control-button--clean" type="button">Clean</button>
+            <button id="clean-button" class="control-button control-button--clean" type="button">CLEAN</button>
             <button id="mobile-pause-button" class="control-button control-button--pause" type="button">Pause</button>
           </div>
         </nav>
@@ -182,21 +195,40 @@
 
       <!-- Bottom HUD: health and how much clean water the helicopter is carrying. -->
       <footer id="bottom-hud" class="hud hud--bottom">
-        <div id="health-display" class="health-display">
-          <span class="hud-label" id="health-label">Health</span>
-          <div
-            id="health-bar"
-            class="health-bar"
-            role="meter"
-            aria-labelledby="health-label"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow="100"
-            aria-valuetext="100 percent"
-          >
-            <div id="health-fill" class="health-fill"></div>
+        <div id="status-bars" class="status-bars">
+          <div id="health-display" class="health-display">
+            <span class="hud-label" id="health-label">Health</span>
+            <div
+              id="health-bar"
+              class="health-bar"
+              role="meter"
+              aria-labelledby="health-label"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="100"
+              aria-valuetext="100 percent"
+            >
+              <div id="health-fill" class="health-fill"></div>
+            </div>
+            <span id="health-value">100%</span>
           </div>
-          <span id="health-value">100%</span>
+
+          <div id="fuel-display" class="fuel-display">
+            <span class="hud-label" id="fuel-label">Fuel</span>
+            <div
+              id="fuel-bar"
+              class="fuel-bar"
+              role="meter"
+              aria-labelledby="fuel-label"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="100"
+              aria-valuetext="100 percent"
+            >
+              <div id="fuel-fill" class="fuel-fill"></div>
+            </div>
+            <span id="fuel-value">100%</span>
+          </div>
         </div>
 
         <div id="water-capacity" class="water-capacity">
@@ -230,32 +262,220 @@
     <section id="game-over-screen" class="screen screen--menu" hidden aria-labelledby="game-over-title">
       <div class="menu-panel">
         <h1 id="game-over-title" class="screen-title">GAME OVER</h1>
+        <p id="game-over-reason" class="game-over-reason"></p>
 
         <dl class="results-list">
           <dt>Final Score</dt>
           <dd id="final-score">0</dd>
-          <dt>Survival Time</dt>
+          <dt id="final-time-label">Elapsed Time</dt>
           <dd id="final-time">00:00</dd>
-          <dt>Water Cleaned</dt>
-          <dd id="water-cleaned">0</dd>
+          <dt>ZONES CLEANED</dt>
+          <dd id="zones-cleaned">0 / 20</dd>
           <dt>Deliveries Completed</dt>
           <dd id="deliveries-completed">0</dd>
+          <dt>TOTAL MONEY EARNED</dt>
+          <dd id="total-money-earned">$0</dd>
+          <dt>MONEY REMAINING</dt>
+          <dd id="final-money">$0</dd>
+          <dt>Difficulty</dt>
+          <dd id="final-difficulty">EASY</dd>
         </dl>
+
+        <form id="score-save-form" class="score-save-form">
+          <label class="score-save-label" for="player-name-input">Pilot name</label>
+          <input id="player-name-input" name="player-name" type="text" maxlength="20" autocomplete="nickname" enterkeyhint="done" spellcheck="false">
+          <p id="score-save-status" class="score-save-status" role="status"></p>
+          <div class="score-save-actions">
+            <button id="save-score-button" class="button button--primary" type="submit">Save Score</button>
+            <button id="view-leaderboards-button" class="button button--secondary" type="button">View Leaderboards</button>
+          </div>
+        </form>
 
         <div class="menu-actions">
           <button id="play-again-button" class="button button--primary" type="button">Play Again</button>
           <button id="main-menu-button" class="button button--secondary" type="button">Main Menu</button>
         </div>
 
-        <a id="learn-more-link" class="learn-more-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Learn More</a>
+        <nav class="brand-links" aria-label="charity: water">
+          <a class="learn-more-link" href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">Visit charity: water</a>
+          <a class="learn-more-link" href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer">Donate to charity: water</a>
+        </nav>
 
         <p class="brand-lockup">
           <img src="img/cw_logo_horizontal.png" alt="charity: water" width="500" height="59">
         </p>
       </div>
     </section>
+
+    <section id="hall-of-fame-screen" class="screen screen--menu" hidden aria-labelledby="hof-title">
+      <div class="menu-panel menu-panel--hof">
+        <h1 id="hof-title" class="screen-title">Hall of Fame</h1>
+        <p class="hof-note">Local records for this browser only. Easy and Hard are ranked separately.</p>
+
+        <div class="hof-difficulty" role="group" aria-label="Leaderboard difficulty">
+          <button id="hof-easy-button" class="button button--secondary is-selected" type="button" aria-pressed="true">EASY</button>
+          <button id="hof-hard-button" class="button button--secondary" type="button" aria-pressed="false">HARD</button>
+        </div>
+
+        <section class="hof-board" aria-labelledby="hof-richest-heading">
+          <h2 id="hof-richest-heading">Richest Pilots</h2>
+          <div id="hof-richest"></div>
+        </section>
+
+        <section class="hof-board" aria-labelledby="hof-scorers-heading">
+          <h2 id="hof-scorers-heading">Top Scorers</h2>
+          <div id="hof-scorers"></div>
+        </section>
+
+        <section class="hof-board" aria-labelledby="hof-fastest-heading">
+          <h2 id="hof-fastest-heading">Fastest Cleanups</h2>
+          <div id="hof-fastest"></div>
+        </section>
+
+        <button id="hof-back-button" class="button button--primary" type="button">Back</button>
+      </div>
+    </section>
   </main>
 
+  <aside id="audio-controls" class="audio-controls" aria-label="Sound settings">
+    <div class="audio-control-row">
+      <button id="audio-mute-button" class="audio-button" type="button" aria-pressed="false">Sound On</button>
+      <button id="audio-panel-toggle" class="audio-button" type="button" aria-expanded="false" aria-controls="audio-panel">Volumes</button>
+    </div>
+    <div id="audio-panel" class="audio-panel" hidden>
+      <label class="audio-slider-label" for="sfx-volume">Sound effects
+        <input id="sfx-volume" type="range" min="0" max="100" value="55" step="1">
+      </label>
+      <label class="audio-slider-label" for="engine-volume">Helicopters
+        <input id="engine-volume" type="range" min="0" max="100" value="32" step="1">
+      </label>
+    </div>
+  </aside>
+
+  <template id="contaminated-zone-template">
+    <div class="water-zone water-zone--contaminated" aria-label="Contaminated water">
+      <span class="puddle puddle--one" aria-hidden="true"></span>
+      <span class="puddle puddle--two" aria-hidden="true"></span>
+      <span class="puddle puddle--three" aria-hidden="true"></span>
+      <span class="puddle puddle--four" aria-hidden="true"></span>
+      <span class="zone-reed zone-reed--a" aria-hidden="true"></span>
+      <span class="zone-reed zone-reed--b" aria-hidden="true"></span>
+      <span class="zone-reed zone-reed--c scenery-md" aria-hidden="true"></span>
+      <span class="zone-mud-rock zone-mud-rock--a" aria-hidden="true"></span>
+      <span class="zone-mud-rock zone-mud-rock--b scenery-md" aria-hidden="true"></span>
+      <span class="zone-stick scenery-md" aria-hidden="true"></span>
+    </div>
+  </template>
+
+  <template id="delivery-zone-template">
+    <div class="water-zone water-zone--clean" aria-label="Clean water delivery location">
+      <span class="ripple ripple--one" aria-hidden="true"></span>
+      <span class="ripple ripple--two" aria-hidden="true"></span>
+      <span class="ripple ripple--three scenery-md" aria-hidden="true"></span>
+      <span class="lily lily--one" aria-hidden="true"></span>
+      <span class="lily lily--two" aria-hidden="true"></span>
+      <span class="lily lily--three scenery-lg" aria-hidden="true"></span>
+      <div class="community-cluster" aria-hidden="true">
+        <div class="community-island"></div>
+        <div class="community-dock">
+          <span class="dock-plank"></span>
+          <span class="dock-plank"></span>
+          <span class="dock-plank"></span>
+          <span class="dock-post dock-post--left"></span>
+          <span class="dock-post dock-post--right"></span>
+        </div>
+        <div class="community-marker">
+          <div class="community-roof"></div>
+          <div class="community-house">
+            <span class="community-window"></span>
+            <span class="community-door"></span>
+          </div>
+        </div>
+        <div class="community-sign">
+          <span class="community-sign-post"></span>
+          <span class="community-sign-board">CHARITY: WATER</span>
+        </div>
+        <img class="scenery-can scenery-can--1" src="img/water-can-transparent.png" alt="">
+        <img class="scenery-can scenery-can--2" src="img/water-can-transparent.png" alt="">
+        <img class="scenery-can scenery-can--3 scenery-md" src="img/water-can-transparent.png" alt="">
+        <img class="scenery-can scenery-can--4 scenery-lg" src="img/water-can-transparent.png" alt="">
+      </div>
+    </div>
+  </template>
+
+  <template id="enemy-helicopter-template">
+    <div class="helicopter helicopter--enemy" aria-hidden="true">
+      <div class="helicopter-facing">
+        <div class="helicopter-rotor"></div>
+        <div class="helicopter-tail"></div>
+        <div class="helicopter-tail-rotor"></div>
+        <div class="helicopter-body">
+          <div class="helicopter-window"></div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="fueling-station-template">
+    <div class="fueling-station" aria-label="Fueling station">
+      <span class="fuel-island" aria-hidden="true"></span>
+      <div class="fuel-dock" aria-hidden="true">
+        <span class="fuel-plank"></span>
+        <span class="fuel-plank"></span>
+        <span class="fuel-plank"></span>
+        <span class="fuel-post fuel-post--left"></span>
+        <span class="fuel-post fuel-post--right"></span>
+      </div>
+      <div class="fuel-tank" aria-hidden="true">
+        <span class="fuel-tank-cap"></span>
+        <span class="fuel-tank-body"></span>
+        <span class="fuel-tank-band"></span>
+      </div>
+      <div class="fuel-pump" aria-hidden="true">
+        <span class="fuel-pump-body"></span>
+        <span class="fuel-pump-window"></span>
+        <span class="fuel-hose"></span>
+        <span class="fuel-nozzle"></span>
+      </div>
+      <div class="fuel-sign">
+        <span class="fuel-sign-post" aria-hidden="true"></span>
+        <span class="fuel-sign-board">FUEL $10</span>
+      </div>
+    </div>
+  </template>
+
+  <template id="health-pickup-template">
+    <div class="health-pickup health-pickup--large" title="Health package +50">
+      <span class="health-pickup-box" aria-hidden="true"></span>
+      <span class="health-pickup-cross" aria-hidden="true"></span>
+      <span class="health-pickup-amount" aria-hidden="true">+50</span>
+    </div>
+  </template>
+
+  <template id="health-pickup-small-template">
+    <div class="health-pickup health-pickup--small" title="Health package +10">
+      <span class="health-pickup-box" aria-hidden="true"></span>
+      <span class="health-pickup-cross" aria-hidden="true"></span>
+      <span class="health-pickup-amount" aria-hidden="true">+10</span>
+    </div>
+  </template>
+
+  <template id="obstacle-rock-template">
+    <div class="obstacle obstacle--rock" title="Rock"></div>
+  </template>
+
+  <template id="obstacle-log-template">
+    <div class="obstacle obstacle--log" title="Log"></div>
+  </template>
+
+  <template id="obstacle-tree-template">
+    <div class="obstacle obstacle--tree" title="Tree">
+      <span class="tree-canopy"></span>
+      <span class="tree-trunk"></span>
+    </div>
+  </template>
+
+  <script src="audio.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
